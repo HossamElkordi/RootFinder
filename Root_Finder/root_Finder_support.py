@@ -6,6 +6,12 @@
 #    Apr 15, 2020 05:32:31 PM +0200  platform: Windows NT
 
 import sys
+from decimal import Decimal
+
+from numpy import double
+
+import solutionTechniuqes as st
+import graphPlotter as gp
 
 try:
     import Tkinter as tk
@@ -14,9 +20,11 @@ except ImportError:
 
 try:
     import ttk
+
     py3 = False
 except ImportError:
     import tkinter.ttk as ttk
+
     py3 = True
 
 
@@ -48,12 +56,44 @@ def init(top, gui, *args, **kwargs):
     root = top
 
 
-def solve():
-    print('root_Finder_support.solve')
-    print(combobox.get())
-    print(expression.get() + ' ' + iter.get() + ' ' + precision.get() + ' ' +
-          upper.get() + ' ' + lower.get() + ' ' + ' ' + guess1.get() + ' ' + guess2.get())
+def solve(txt, gph):
+    txt.delete("1.0", tk.END)
+    method = combobox.get()
+    try:
+        answer = None
+        exp = expression.get()
+        i = int(iter.get())
+        pre = double(precision.get())
+        num_digits = abs(Decimal(precision.get()).as_tuple().exponent)
+        if method == 'Bisection method' or method == 'Regula-Falsi method':
+            low = double(lower.get())
+            up = double(upper.get())
+            solver = st.solution_techinques(exp)
+            if method == 'Bisection method':
+                answer = solver.bisection(up, low, pre, i, num_digits)
+            else:
+                answer = solver.regulafalsi(up, low, pre, i, num_digits)
+            print_indirect(txt, answer)
+            plot = gp.graphPlotter(gph, 0, answer, solver)
+        elif method == 'Fixed point iteration method':
+            pass
+        else:
+            pass
+    except:
+        txt.insert(tk.END, 'Wrong input format')
     sys.stdout.flush()
+
+
+def print_indirect(console, answer):
+    console.insert(tk.END, 'Calculated root: {}\n\n'.format(answer[0][len(answer[0]) - 1]))
+    console.insert(tk.END, 'Iter\t(Upper, Lower) Bounds\t\tAccuracy\n')
+    i = 0
+    for bound in answer[1]:
+        if i == 0:
+            console.insert(tk.END, '{}\t({}, {})\t\t\t---\n'.format(i+1, bound[0], bound[1]))
+        else:
+            console.insert(tk.END, '{}\t({}, {})\t\t\t{}\n'.format(i+1, bound[0], bound[1], answer[2][i-1]))
+        i += 1
 
 
 def check():
@@ -71,4 +111,5 @@ def destroy_window():
 
 if __name__ == '__main__':
     import root_Finder
+
     root_Finder.vp_start_gui()

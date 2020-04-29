@@ -6,7 +6,6 @@
 #    Apr 15, 2020 05:32:42 PM +0200  platform: Windows NT
 
 import sys
-
 from graphPlotter import graphPlotter
 
 try:
@@ -103,7 +102,12 @@ class RootFinder:
         self.graphConsole.configure(highlightbackground="#2327ba")
         self.graphConsole.configure(highlightcolor="#ffffff")
 
-        self.graph = graphPlotter(self.graphConsole)
+        self.textCanvas = tk.Text(self.textConsole)
+        self.scrolText = ttk.Scrollbar(self.textConsole, command=self.textCanvas.yview)
+        self.scrolText.pack(side=tk.RIGHT, fill=tk.Y)
+        self.textCanvas.place(relx=0.0, rely=0.0, relheight=1, relwidth=1)
+        self.textCanvas.configure(background="#3e3e3e")
+        self.textCanvas.configure(foreground="#ffffff")
 
         self.chooseLbl = ttk.Label(top)
         self.chooseLbl.place(relx=0.02, rely=0.031, height=19, width=258)
@@ -134,7 +138,7 @@ class RootFinder:
         self.enterLbl.configure(relief="flat")
         self.enterLbl.configure(anchor='e')
         self.enterLbl.configure(justify='right')
-        self.enterLbl.configure(text='''Enter a function of x :''')
+        self.enterLbl.configure(text='Enter a function of x [f(x)] :')
 
         self.funcEntry = ttk.Entry(top)
         self.funcEntry.place(relx=0.428, rely=0.109, relheight=0.037, relwidth=0.357)
@@ -239,7 +243,8 @@ class RootFinder:
         self.guessEntry1.configure(cursor="ibeam")
         self.guessEntry1.configure(textvariable=root_Finder_support.guess1)
 
-        self.methodsCB.bind("<<ComboboxSelected>>", lambda frame=self.directFr: self.itemChanged(frame))
+        self.methodsCB.bind("<<ComboboxSelected>>", lambda frame=self.directFr, label=self.enterLbl:
+                                                    self.itemChanged(frame, label))
 
         self.checkBtn = tk.Checkbutton(top)
         self.checkBtn.place(relx=0.257, rely=0.558, relheight=0.039, relwidth=0.401)
@@ -257,13 +262,14 @@ class RootFinder:
 
         self.findRootBtn = ttk.Button(top)
         self.findRootBtn.place(relx=0.337, rely=0.605, height=25, width=136)
-        self.findRootBtn.configure(command=root_Finder_support.solve)
+        self.findRootBtn.configure(command=lambda txt=self.textCanvas, gph=self.graphConsole:
+                                                        root_Finder_support.solve(txt,gph))
         self.findRootBtn.configure(takefocus="")
         self.findRootBtn.configure(text='''Find Root''')
 
-    def itemChanged(self, frame):
+    def itemChanged(self, frame, label):
         item = self.methodsCB.get()
-        if item == 'Fixed point iteration method' or item == 'Secant method':
+        if item == 'Secant method':
             self.guessLbl2 = ttk.Label(self.directFr)
             self.guessLbl2.place(relx=0.041, rely=0.556, height=18, width=100, bordermode='ignore')
             self.guessLbl2.configure(background="#4b4b4b")
@@ -272,17 +278,24 @@ class RootFinder:
             self.guessLbl2.configure(relief="flat")
             self.guessLbl2.configure(anchor='w')
             self.guessLbl2.configure(justify='left')
-            if item == 'Secant method':
-                self.guessLbl2.configure(text='Initial guess 2 :')
-            else:
-                self.guessLbl2.configure(text='Helper function :')
+            self.guessLbl2.configure(text='Initial guess 2 :')
 
             self.guessEntry2 = ttk.Entry(self.directFr)
             self.guessEntry2.place(relx=0.397, rely=0.556, relheight=0.178, relwidth=0.427, bordermode='ignore')
             self.guessEntry2.configure(takefocus="")
             self.guessEntry2.configure(cursor="ibeam")
             self.guessEntry2.configure(textvariable=root_Finder_support.guess2)
+
+            self.enterLbl.configure(text='Enter a function of x [f(x)] :')
+        elif item == 'Fixed point iteration method':
+            self.enterLbl.configure(text='Enter a function of x [g(x)] :')
+            try:
+                self.guessLbl2.destroy()
+                self.guessEntry2.destroy()
+            except:
+                pass
         else:
+            self.enterLbl.configure(text='Enter a function of x [f(x)] :')
             try:
                 self.guessLbl2.destroy()
                 self.guessEntry2.destroy()

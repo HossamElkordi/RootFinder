@@ -6,7 +6,6 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 
-import solutionTechniuqes
 
 try:
     import Tkinter as tk
@@ -19,14 +18,38 @@ style.use('ggplot')
 
 class graphPlotter():
 
-    def __init__(self, frame):
+    def __init__(self, frame, method, answer, solver):
         self.frame = frame
         self.fig = Figure(figsize=(5, 5), dpi=80)
         self.plt = self.fig.add_subplot(1, 1, 1)
 
-        # self.current = 0
-        # self.xs = dict()
-        # self.ys = dict()
+        self.current = 0
+        self.xs = dict()
+        self.ys = dict()
+
+        self.solver = solver
+        # self.solver = solutionTechniuqes.solution_techinques()
+        self.method = method
+
+        if self.method == 0:
+            '''indirect methods'''
+            self.bounds = answer[1]
+            self.fx = np.arange(self.bounds[0][0]-1.0, self.bounds[0][1]+1.0, 0.2)
+            self.fy = np.array([self.solver.evaluate(num) for num in self.fx])
+            self.boundaries = []
+            minY = self.get_min_y()
+            maxY = self.get_max_y()
+            for bound in self.bounds:
+                self.boundaries.append(((bound[0], bound[0]), (minY, maxY), (bound[1], bound[1]), (minY, maxY)))
+            self.plt.plot(self.fx, self.fy)
+            self.plt.plot(self.boundaries[self.current][0], self.boundaries[self.current][1])
+            self.plt.plot(self.boundaries[self.current][2], self.boundaries[self.current][3])
+        elif self.method == 1:
+            '''fixed point iteration method'''
+        elif self.method == 2:
+            '''newton and secant methods'''
+
+
         # self.xs[0] = np.arange(-3, 3, 0.2)
         # self.ys[0] = []
         # for num in self.xs[0]:
@@ -58,18 +81,49 @@ class graphPlotter():
         self.prev_photo = tk.PhotoImage(file='Images/prev.png')
         self.prev_graph = ttk.Button(self.toolbar, image=self.prev_photo)
         self.prev_graph.pack(side=tk.RIGHT)
-        # next.configure(command=root_Finder_support.solve)
+        self.prev_graph.configure(command=self.prev)
         self.prev_graph.configure(width=2.5)
         ToolTip(self.prev_graph, self.tooltip_font, 'Previous Graph', delay=0.1)
 
     def next(self):
         self.fig.clear()
         self.plt = self.fig.add_subplot(1, 1, 1)
-        self.current = (self.current + 1) % 2
-        self.plt.plot(self.xs[self.current], self.ys[self.current])
+        if self.method == 0:
+            self.current = (self.current + 1) % len(self.boundaries)
+            self.plt.plot(self.fx, self.fy)
+            self.plt.plot(self.boundaries[self.current][0], self.boundaries[self.current][1])
+            self.plt.plot(self.boundaries[self.current][2], self.boundaries[self.current][3])
+        # self.plt.plot(self.xs[self.current], self.ys[self.current])
         self.canvas.draw()
         self.canvas.figure.set_canvas(self.canvas)
 
+    def prev(self):
+        self.fig.clear()
+        self.plt = self.fig.add_subplot(1, 1, 1)
+        if self.method == 0:
+            self.current -= 1
+            if self.current < 0:
+              self.current = len(self.boundaries - 1)
+            self.plt.plot(self.fx, self.fy)
+            self.plt.plot(self.boundaries[self.current][0], self.boundaries[self.current][1])
+            self.plt.plot(self.boundaries[self.current][2], self.boundaries[self.current][3])
+        # self.plt.plot(self.xs[self.current], self.ys[self.current])
+        self.canvas.draw()
+        self.canvas.figure.set_canvas(self.canvas)
+
+    def get_max_y(self):
+        n = None
+        for num in self.fy:
+            if n == None or num > n:
+                n = num
+        return n
+
+    def get_min_y(self):
+        n = None
+        for num in self.fy:
+            if n == None or num < n:
+                n = num
+        return n
 
 
 class ToolTip(tk.Toplevel):

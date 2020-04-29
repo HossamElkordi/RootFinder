@@ -1,11 +1,13 @@
 from math import *
+from typing import List, Any
+
 from scipy.misc import derivative
 
 
 class solution_techinques:
 
-    def __init__(self):
-        self.expression = None
+    def __init__(self, expression):
+        self.expression = expression
 
     def f(self, x):
         return self.evaluate(x)
@@ -16,8 +18,8 @@ class solution_techinques:
     def evaluate(self, x):
         return eval(self.expression)
 
-    def set_expression(self, expression):
-        self.expression = expression
+    # def set_expression(self, expression):
+    #     self.expression = expression
 
     def bisection(self, upper, lower, accuracy, max_iter, round_digit):
         fu = self.evaluate(upper)
@@ -28,8 +30,9 @@ class solution_techinques:
         old_x = 0.0
         bounds = []
         xes = []
+        acc = []
         while True:
-            bounds.append((upper, lower))
+            bounds.append((lower, upper))
             x = round((lower + upper) / 2.0, round_digit)
             xes.append(x)
             if fu * self.evaluate(x) < 0:
@@ -37,15 +40,17 @@ class solution_techinques:
             else:
                 upper = x
                 fu = self.evaluate(upper)
-            i = i + 1
+            i += 1
             if i == 1:
                 continue
             if i == max_iter:
                 break
-            if abs(old_x - x) < accuracy:
+            a = round(abs(old_x - x), round_digit)
+            acc.append(a)
+            if a < accuracy:
                 break
             old_x = x
-        return [xes, bounds]
+        return [xes, bounds, acc]
 
     def regulafalsi(self, upper, lower, accuracy, max_iter, round_digit):
         fu = self.evaluate(upper)
@@ -56,8 +61,9 @@ class solution_techinques:
         old_x = 0.0
         bounds = []
         xes = []
+        acc = []
         while True:
-            bounds.append((upper, lower))
+            bounds.append((lower, upper))
             x = round((lower * fu - upper * fl) / (fu - fl), round_digit)
             xes.append(x)
             if fu * self.evaluate(x) < 0:
@@ -66,36 +72,62 @@ class solution_techinques:
             else:
                 upper = x
                 fu = self.evaluate(upper)
-            i = i + 1
+            i += 1
             if i == 1:
                 continue
             if i == max_iter:
                 break
-            if abs(old_x - x) < accuracy:
+            a = round(abs(old_x - x), round_digit)
+            acc.append(a)
+            if a < accuracy:
                 break
             old_x = x
-        return [xes, bounds]
+        return [xes, bounds, acc]
+
+    def FixedPoint(self, init, accuracy, max_iter, round_digit):
+        prev_guesses = []
+        xes = []
+        acc = []
+        i = 0
+        while i < max_iter:
+            prev_guesses.append(init)
+            old = init
+            init = round(self.evaluate(init), round_digit)
+            xes.append(init)
+            i += 1
+            if i == max_iter:
+                break
+            a = round(abs(old-init), round_digit)
+            acc.append(a)
+            if a < accuracy:
+                break
+        return [xes, prev_guesses, acc]
 
     def newtonRaphson(self, init, accuracy, max_iter, round_digit):
         i = 0
         prev_guess = []
         xes = []
+        acc = []
         while True:
             prev_guess.append(init)
             x = round(init - (self.evaluate(init) / self.d(init)), round_digit)
             xes.append(x)
-            i = i + 1
-            if abs(x - init) < accuracy:
+            i += 1
+            a = round(abs(x - init), round_digit)
+            acc.append(a)
+            if a < accuracy:
                 break
             if i == max_iter:
                 break
             init = x
-        return [xes, prev_guess]
+        return [xes, prev_guess, acc]
 
 
     def secant(self, init, pre_init, accuracy, max_iter, round_digit):
         prev_guesses = []
         xes = []
+        acc = []
+        i = 0
         while True:
             prev_guesses.append((pre_init, init))
             x = init - ((self.evaluate(init) * (pre_init - init)) / (
@@ -104,9 +136,11 @@ class solution_techinques:
             xes.append(x)
             pre_init = init
             init = x
-            i = i + 1
+            i += 1
             if i == max_iter:
                 break
-            if abs(init - pre_init) < accuracy:
+            a = round(abs(init - pre_init), round_digit)
+            acc.append(a)
+            if a < accuracy:
                 break
-        return [xes, prev_guesses]
+        return [xes, prev_guesses, acc]
