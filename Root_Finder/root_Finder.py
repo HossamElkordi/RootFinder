@@ -6,7 +6,7 @@
 #    Apr 15, 2020 05:32:42 PM +0200  platform: Windows NT
 
 import sys
-from graphPlotter import graphPlotter
+# from graphPlotter import graphPlotter
 
 try:
     import Tkinter as tk
@@ -23,7 +23,6 @@ except ImportError:
     py3 = True
 
 import root_Finder_support
-
 
 def vp_start_gui():
     '''Starting point when module is the main routine.'''

@@ -7,9 +7,8 @@
 
 import sys
 from decimal import Decimal
-
 from numpy import double
-
+import time
 import solutionTechniuqes as st
 import graphPlotter as gp
 
@@ -61,6 +60,7 @@ def solve(txt, gph):
     method = combobox.get()
     try:
         answer = None
+        plot = None
         exp = expression.get()
         i = int(iter.get())
         pre = double(precision.get())
@@ -70,11 +70,13 @@ def solve(txt, gph):
             up = double(upper.get())
             solver = st.solution_techinques(exp)
             if method == 'Bisection method':
+                current = time.time() * 1000
                 answer = solver.bisection(up, low, pre, i, num_digits)
             else:
+                current = time.time() * 1000
                 answer = solver.regulafalsi(up, low, pre, i, num_digits)
-            print_indirect(txt, answer)
-            plot = gp.graphPlotter(gph, 0, answer, solver)
+            if print_indirect(txt, answer, current) != -1:
+                plot = gp.graphPlotter(gph, 0, answer, solver)
         elif method == 'Fixed point iteration method':
             pass
         else:
@@ -84,15 +86,19 @@ def solve(txt, gph):
     sys.stdout.flush()
 
 
-def print_indirect(console, answer):
-    console.insert(tk.END, 'Calculated root: {}\n\n'.format(answer[0][len(answer[0]) - 1]))
+def print_indirect(console, answer, current):
+    if answer == 'No root in this interval':
+        console.insert(tk.END, answer)
+        return -1
+    console.insert(tk.END, 'Calculated root: {}\t in: {} milliseconds\n\n'.format(answer[0][len(answer[0]) - 1],
+                                                                                  time.time() * 1000 - current))
     console.insert(tk.END, 'Iter\t(Upper, Lower) Bounds\t\tAccuracy\n')
     i = 0
     for bound in answer[1]:
         if i == 0:
-            console.insert(tk.END, '{}\t({}, {})\t\t\t---\n'.format(i+1, bound[0], bound[1]))
+            console.insert(tk.END, '{}\t({}, {})\t\t\t---\n'.format(i + 1, bound[0], bound[1]))
         else:
-            console.insert(tk.END, '{}\t({}, {})\t\t\t{}\n'.format(i+1, bound[0], bound[1], answer[2][i-1]))
+            console.insert(tk.END, '{}\t({}, {})\t\t\t{}\n'.format(i + 1, bound[0], bound[1], answer[2][i - 1]))
         i += 1
 
 

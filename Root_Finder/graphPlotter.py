@@ -28,7 +28,6 @@ class graphPlotter():
         self.ys = dict()
 
         self.solver = solver
-        # self.solver = solutionTechniuqes.solution_techinques()
         self.method = method
 
         if self.method == 0:
@@ -37,8 +36,8 @@ class graphPlotter():
             self.fx = np.arange(self.bounds[0][0]-1.0, self.bounds[0][1]+1.0, 0.2)
             self.fy = np.array([self.solver.evaluate(num) for num in self.fx])
             self.boundaries = []
-            minY = self.get_min_y()
-            maxY = self.get_max_y()
+            minY = self.get_min(self.fy)
+            maxY = self.get_max(self.fy)
             for bound in self.bounds:
                 self.boundaries.append(((bound[0], bound[0]), (minY, maxY), (bound[1], bound[1]), (minY, maxY)))
             self.plt.plot(self.fx, self.fy)
@@ -101,9 +100,10 @@ class graphPlotter():
         self.fig.clear()
         self.plt = self.fig.add_subplot(1, 1, 1)
         if self.method == 0:
-            self.current -= 1
-            if self.current < 0:
-              self.current = len(self.boundaries - 1)
+            if self.current == 0:
+              self.current = len(self.boundaries) - 1
+            else:
+                self.current -= 1
             self.plt.plot(self.fx, self.fy)
             self.plt.plot(self.boundaries[self.current][0], self.boundaries[self.current][1])
             self.plt.plot(self.boundaries[self.current][2], self.boundaries[self.current][3])
@@ -111,16 +111,16 @@ class graphPlotter():
         self.canvas.draw()
         self.canvas.figure.set_canvas(self.canvas)
 
-    def get_max_y(self):
+    def get_max(self,arr):
         n = None
-        for num in self.fy:
+        for num in arr:
             if n == None or num > n:
                 n = num
         return n
 
-    def get_min_y(self):
+    def get_min(self,arr):
         n = None
-        for num in self.fy:
+        for num in arr:
             if n == None or num < n:
                 n = num
         return n

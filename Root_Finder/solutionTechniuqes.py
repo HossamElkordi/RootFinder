@@ -35,11 +35,16 @@ class solution_techinques:
             bounds.append((lower, upper))
             x = round((lower + upper) / 2.0, round_digit)
             xes.append(x)
-            if fu * self.evaluate(x) < 0:
+            mul = fu * self.evaluate(x)
+            if mul < 0:
                 lower = x
-            else:
+                fl = self.evaluate(lower)
+            elif mul > 0:
                 upper = x
                 fu = self.evaluate(upper)
+            else:
+                acc.append(round(abs(old_x - x), round_digit))
+                break
             i += 1
             if i == 1:
                 continue
@@ -66,12 +71,16 @@ class solution_techinques:
             bounds.append((lower, upper))
             x = round((lower * fu - upper * fl) / (fu - fl), round_digit)
             xes.append(x)
-            if fu * self.evaluate(x) < 0:
+            mul = fu * self.evaluate(x)
+            if mul < 0:
                 lower = x
                 fl = self.evaluate(lower)
-            else:
+            elif mul > 0:
                 upper = x
                 fu = self.evaluate(upper)
+            else:
+                acc.append(round(abs(old_x - x), round_digit))
+                break
             i += 1
             if i == 1:
                 continue
