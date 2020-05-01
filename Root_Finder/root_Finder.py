@@ -6,6 +6,7 @@
 #    Apr 15, 2020 05:32:42 PM +0200  platform: Windows NT
 
 import sys
+
 # from graphPlotter import graphPlotter
 
 try:
@@ -23,6 +24,7 @@ except ImportError:
     py3 = True
 
 import root_Finder_support
+
 
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
@@ -243,7 +245,7 @@ class RootFinder:
         self.guessEntry1.configure(textvariable=root_Finder_support.guess1)
 
         self.methodsCB.bind("<<ComboboxSelected>>", lambda frame=self.directFr, label=self.enterLbl:
-                                                    self.itemChanged(frame, label))
+        self.itemChanged(frame, label))
 
         self.checkBtn = tk.Checkbutton(top)
         self.checkBtn.place(relx=0.257, rely=0.558, relheight=0.039, relwidth=0.401)
@@ -257,14 +259,19 @@ class RootFinder:
         self.checkBtn.configure(justify='left')
         self.checkBtn.configure(text='''Check if you want to output result in file''')
         self.checkBtn.configure(variable=root_Finder_support.check68)
-        self.checkBtn.configure(command=root_Finder_support.solve)
 
         self.findRootBtn = ttk.Button(top)
         self.findRootBtn.place(relx=0.337, rely=0.605, height=25, width=136)
         self.findRootBtn.configure(command=lambda txt=self.textCanvas, gph=self.graphConsole:
-                                                        root_Finder_support.solve(txt,gph))
+                                                                       root_Finder_support.solve(txt, gph))
         self.findRootBtn.configure(takefocus="")
         self.findRootBtn.configure(text='''Find Root''')
+
+        self.findRootBtn = ttk.Button(top)
+        self.findRootBtn.place(relx=0.890, rely=0.015, height=25, width=56)
+        self.findRootBtn.configure(command=lambda  txt=self.textCanvas:root_Finder_support.read_file(txt))
+        self.findRootBtn.configure(takefocus="")
+        self.findRootBtn.configure(text='''read file''')
 
     def itemChanged(self, frame, label):
         item = self.methodsCB.get()
