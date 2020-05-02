@@ -163,9 +163,9 @@ class graphPlotter():
             self.plt.plot(self.unit_x, self.unit_y, color='c', label='f\'(x)')
         if self.method == 3:
             self.plt.axvline(x=self.guesses[self.current][0], color='b', label='Xi-1')
-            self.plt.axvline(x=self.guesses[self.current][1], color='y', label='Xi-1')
+            self.plt.axvline(x=self.guesses[self.current][1], color='y', label='Xi-2')
         else:
-            self.plt.axvline(x=self.guesses[self.current], color='b', label='Xi')
+            self.plt.axvline(x=self.guesses[self.current], color='b', label='Xi-1')
         self.plt.axvline(x=self.xes[self.current], color='g', label='Xi')
 
 
