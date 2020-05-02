@@ -81,8 +81,6 @@ def solve(txt, gph):
             else:
                 answer = solver.regulafalsi(up, low, pre, i, num_digits)
             s = print_indirect(txt, answer, current)
-            # if s != -1:
-            #     gp.graphPlotter(gph, tech, answer, solver)
         elif method == 'fixed point iteration method' or method == 'newton raphson method':
             guess = double(guess1.get())
             current = time.time() * 1000
@@ -93,8 +91,6 @@ def solve(txt, gph):
                 tech = 2
                 answer = solver.newtonRaphson(guess, pre, i, num_digits)
             s = print_fixed_newton(txt, answer, current)
-            # if s != -1:
-            #     gp.graphPlotter(gph, tech, answer, solver)
         else:
             tech = 3
             guess_1 = double(guess1.get())
@@ -102,13 +98,11 @@ def solve(txt, gph):
             current = time.time() * 1000
             answer = solver.secant(guess_1, guess_2, pre, i, num_digits)
             s = print_secant(txt, answer, current)
-            # if s != -1:
-            #     gp.graphPlotter(gph, 3, answer, solver)
         if s != -1:
             if check68.get() == TRUE:
                 w = write_in_file(s, answer, tech, exp)
                 if w:
-                    gp.graphPlotter(gph, tech, answer, solver, True, w[0].replace('.pdf', 'Figs.pdf'))
+                    gp.graphPlotter(gph, tech, answer, solver, True, w.replace('.pdf', 'Figs.pdf'))
             else:
                 txt.insert(tk.END, s)
                 gp.graphPlotter(gph, tech, answer, solver, False, '')
@@ -120,7 +114,7 @@ def solve(txt, gph):
 
 
 def write_in_file(s, answer, tech, expression):
-    filename = asksaveasfile(mode='w', filetypes=[('PDF File', '*.pdf')] , defaultextension=[('PDF File', '*.pdf')])
+    filename = asksaveasfile(mode='w', filetypes=[('PDF File', '*.pdf')], defaultextension=[('PDF File', '*.pdf')])
     if filename is None:
         return False
     pdf = canvas.Canvas(filename.name)
@@ -128,55 +122,62 @@ def write_in_file(s, answer, tech, expression):
     lines = s.split('\n')
     pdf.drawString(40, 800, 'Root Finder Results For: F(x) = ' + expression)
     pdf.drawString(40, 780, lines[0].replace('\t', '   '))
-    pdf.drawString(40, 720, 'iter')
-    for i in range(len(answer[0])):
-        pdf.drawString(40, 700-(i * 20), '{}'.format(i+1))
 
     i = 0
+    pos = 0
     if tech == 0:
+        pdf.drawString(40, 720, 'iter')
         pdf.drawString(70, 720, '(Upper, Lower) Bounds')
         pdf.drawString(300, 720, 'Xi')
         pdf.drawString(450, 720, 'Accuracy')
         for bound in answer[1]:
-            pdf.drawString(70, 700-(i * 20), '({}, {})'.format(bound[0], bound[1]))
-            pdf.drawString(300, 700 - (i * 20), '{}'.format(answer[0][i]))
+            if 700 - (i * 20) < 40:
+                pdf.showPage()
+                pos = 0
+            pdf.drawString(40, 700 - (pos * 20), '{}'.format(i + 1))
+            pdf.drawString(70, 700-(pos * 20), '({}, {})'.format(bound[0], bound[1]))
+            pdf.drawString(300, 700 - (pos * 20), '{}'.format(answer[0][i]))
             if i == 0:
-                pdf.drawString(450, 700 - (i * 20), '---')
+                pdf.drawString(450, 700 - (pos * 20), '---')
             else:
-                pdf.drawString(450, 700 - (i * 20), '{}'.format(answer[2][i - 1]))
+                pdf.drawString(450, 700 - (pos * 20), '{}'.format(answer[2][i - 1]))
             i += 1
+            pos += 1
     elif tech == 1 or tech == 2:
+        pdf.drawString(40, 720, 'iter')
         pdf.drawString(100, 720, 'Xi-1')
         pdf.drawString(300, 720, 'Xi')
         pdf.drawString(450, 720, 'Accuracy')
         for i in range(len(answer[0])):
-            pdf.drawString(100, 700 - (i * 20), '{}'.format(answer[1][i]))
-            pdf.drawString(300, 700 - (i * 20), '{}'.format(answer[0][i]))
-            pdf.drawString(450, 700 - (i * 20), '{}'.format(answer[2][i]))
+            if 700 - (i * 20) < 40:
+                pdf.showPage()
+                pos = 0
+            pdf.drawString(40, 700 - (pos * 20), '{}'.format(i + 1))
+            pdf.drawString(100, 700 - (pos * 20), '{}'.format(answer[1][i]))
+            pdf.drawString(300, 700 - (pos * 20), '{}'.format(answer[0][i]))
+            pdf.drawString(450, 700 - (pos * 20), '{}'.format(answer[2][i]))
             i += 1
+            pos += 1
     else:
+        pdf.drawString(40, 720, 'iter')
         pdf.drawString(70, 720, 'Xi-2')
         pdf.drawString(150, 720, 'Xi-1')
         pdf.drawString(300, 720, 'Xi')
         pdf.drawString(450, 720, 'Accuracy')
         for i in range(len(answer[0])):
-            pdf.drawString(70, 700 - (i * 20), '{}'.format(answer[1][i][0]))
-            pdf.drawString(150, 700 - (i * 20), '{}'.format(answer[1][i][1]))
-            pdf.drawString(300, 700 - (i * 20), '{}'.format(answer[0][i]))
-            pdf.drawString(450, 700 - (i * 20), '{}'.format(answer[2][i]))
+            if 700 - (i * 20) < 40:
+                pdf.showPage()
+                pos = 0
+            pdf.drawString(40, 700 - (pos * 20), '{}'.format(i + 1))
+            pdf.drawString(70, 700 - (pos * 20), '{}'.format(answer[1][i][0]))
+            pdf.drawString(150, 700 - (pos * 20), '{}'.format(answer[1][i][1]))
+            pdf.drawString(300, 700 - (pos * 20), '{}'.format(answer[0][i]))
+            pdf.drawString(450, 700 - (pos * 20), '{}'.format(answer[2][i]))
             i += 1
+            pos += 1
 
     pdf.save()
-
-    pages = []
-    pdf_file_obj = open(filename.name, 'rb')
-    pdf_reader = PyPDF2.PdfFileReader(pdf_file_obj)
-    i = 0
-    while i < pdf_reader.getNumPages():
-        pages.append(pdf_reader.getPage(i))
-        i += 1
-    pdf_file_obj.close()
-    return [filename.name, pages]
+    return filename.name
 
 
 def print_indirect(console, answer, current):
