@@ -156,14 +156,17 @@ class graphPlotter():
             self.b = self.solver.f(self.guesses[self.current][0]) - (self.slope * self.guesses[self.current][0])
             self.unit_y = np.array([((self.slope * num) + self.b) for num in self.unit_x])
 
-        self.plt.plot(self.fx, self.fy, color='r')
-        self.plt.plot(self.unit_x, self.unit_y, color='c')
-        if self.method == 3:
-            self.plt.axvline(x=self.guesses[self.current][0], color='b')
-            self.plt.axvline(x=self.guesses[self.current][1], color='y')
+        self.plt.plot(self.fx, self.fy, color='r', label='f(x)')
+        if self.method == 1:
+            self.plt.plot(self.unit_x, self.unit_y, color='c', label='y=x')
         else:
-            self.plt.axvline(x=self.guesses[self.current], color='b')
-        self.plt.axvline(x=self.xes[self.current], color='g')
+            self.plt.plot(self.unit_x, self.unit_y, color='c', label='f\'(x)')
+        if self.method == 3:
+            self.plt.axvline(x=self.guesses[self.current][0], color='b', label='Xi-1')
+            self.plt.axvline(x=self.guesses[self.current][1], color='y', label='Xi-1')
+        else:
+            self.plt.axvline(x=self.guesses[self.current], color='b', label='Xi')
+        self.plt.axvline(x=self.xes[self.current], color='g', label='Xi')
 
 
 class ToolTip(tk.Toplevel):
