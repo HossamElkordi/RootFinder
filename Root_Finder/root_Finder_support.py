@@ -150,9 +150,9 @@ def write_in_file(s, answer, tech, expression):
         pdf.drawString(300, 720, 'Xi')
         pdf.drawString(450, 720, 'Accuracy')
         for i in range(len(answer[0])):
-            pdf.drawString(100, 700 - (i * 20), answer[1][i])
-            pdf.drawString(300, 700 - (i * 20), answer[0][i])
-            pdf.drawString(450, 700 - (i * 20), answer[2][i])
+            pdf.drawString(100, 700 - (i * 20), '{}'.format(answer[1][i]))
+            pdf.drawString(300, 700 - (i * 20), '{}'.format(answer[0][i]))
+            pdf.drawString(450, 700 - (i * 20), '{}'.format(answer[2][i]))
             i += 1
     else:
         pdf.drawString(70, 720, 'Xi-2')
@@ -160,10 +160,10 @@ def write_in_file(s, answer, tech, expression):
         pdf.drawString(300, 720, 'Xi')
         pdf.drawString(450, 720, 'Accuracy')
         for i in range(len(answer[0])):
-            pdf.drawString(70, 700 - (i * 20), answer[1][i][0])
-            pdf.drawString(150, 700 - (i * 20), answer[1][i][1])
-            pdf.drawString(300, 700 - (i * 20), answer[0][i])
-            pdf.drawString(450, 700 - (i * 20), answer[2][i])
+            pdf.drawString(70, 700 - (i * 20), '{}'.format(answer[1][i][0]))
+            pdf.drawString(150, 700 - (i * 20), '{}'.format(answer[1][i][1]))
+            pdf.drawString(300, 700 - (i * 20), '{}'.format(answer[0][i]))
+            pdf.drawString(450, 700 - (i * 20), '{}'.format(answer[2][i]))
             i += 1
 
     pdf.save()
