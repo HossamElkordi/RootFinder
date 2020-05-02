@@ -68,7 +68,7 @@ class graphPlotter():
 
             self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame)
             self.toolbar.update()
-            self.canvas.tkcanvas.pack(side=tk.TOP, expand=True)
+            self.canvas.get_tk_widget().pack(side=tk.TOP, expand=True)
             self.canvas.get_tk_widget().pack(side=tk.TOP, expand=True)
 
             self.tooltip_font = "TkDefaultFont"
