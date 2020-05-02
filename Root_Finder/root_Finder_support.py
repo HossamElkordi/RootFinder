@@ -131,7 +131,7 @@ def write_in_file(s, answer, tech, expression):
         pdf.drawString(300, 720, 'Xi')
         pdf.drawString(450, 720, 'Accuracy')
         for bound in answer[1]:
-            if 700 - (i * 20) < 40:
+            if 700 - (pos * 20) < 40:
                 pdf.showPage()
                 pos = 0
             pdf.drawString(40, 700 - (pos * 20), '{}'.format(i + 1))
@@ -149,7 +149,7 @@ def write_in_file(s, answer, tech, expression):
         pdf.drawString(300, 720, 'Xi')
         pdf.drawString(450, 720, 'Accuracy')
         for i in range(len(answer[0])):
-            if 700 - (i * 20) < 40:
+            if 700 - (pos * 20) < 40:
                 pdf.showPage()
                 pos = 0
             pdf.drawString(40, 700 - (pos * 20), '{}'.format(i + 1))
@@ -165,7 +165,7 @@ def write_in_file(s, answer, tech, expression):
         pdf.drawString(300, 720, 'Xi')
         pdf.drawString(450, 720, 'Accuracy')
         for i in range(len(answer[0])):
-            if 700 - (i * 20) < 40:
+            if 700 - (pos * 20) < 40:
                 pdf.showPage()
                 pos = 0
             pdf.drawString(40, 700 - (pos * 20), '{}'.format(i + 1))
