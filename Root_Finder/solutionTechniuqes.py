@@ -1,4 +1,6 @@
 from math import *
+from sympy import *
+from sympy.parsing.sympy_parser import parse_expr
 from typing import List, Any
 
 from scipy.misc import derivative
@@ -122,9 +124,13 @@ class solution_techinques:
         prev_guess = []
         xes = []
         acc = []
+        x = Symbol('x')
+        deriv = parse_expr(self.expression)
+        deriv = deriv.diff(x)
+        deriv = lambdify(x, deriv)
         while True:
             prev_guess.append(init)
-            x = round(init - (self.evaluate(init) / self.d(init)), round_digit)
+            x = round(init - (self.evaluate(init) / deriv(init)), round_digit)
             if x == inf:
                 return 'Overflow in math range'
             xes.append(x)

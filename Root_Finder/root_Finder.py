@@ -144,7 +144,7 @@ class RootFinder:
         self.funcEntry = ttk.Entry(top)
         self.funcEntry.place(relx=0.428, rely=0.109, relheight=0.037, relwidth=0.357)
         self.funcEntry.configure(takefocus="")
-        self.funcEntry.configure(cursor="ibeam")
+        self.funcEntry.configure(cursor="arrow")
         self.funcEntry.configure(textvariable=root_Finder_support.expression)
 
         self.iterLbl = ttk.Label(top)
@@ -160,7 +160,7 @@ class RootFinder:
         self.iterEntry = ttk.Entry(top)
         self.iterEntry.place(relx=0.428, rely=0.202, relheight=0.037, relwidth=0.191)
         self.iterEntry.configure(takefocus="")
-        self.iterEntry.configure(cursor="ibeam")
+        self.iterEntry.configure(cursor="arrow")
         self.iterEntry.configure(textvariable=root_Finder_support.iter)
         self.iterEntry.insert(0, '50')
 
@@ -177,7 +177,7 @@ class RootFinder:
         self.preEntry = ttk.Entry(top)
         self.preEntry.place(relx=0.428, rely=0.264, relheight=0.037, relwidth=0.191)
         self.preEntry.configure(takefocus="")
-        self.preEntry.configure(cursor="ibeam")
+        self.preEntry.configure(cursor="arrow")
         self.preEntry.configure(textvariable=root_Finder_support.precision)
         self.preEntry.insert(0, '0.00001')
 
@@ -202,7 +202,7 @@ class RootFinder:
         self.lowEntry = ttk.Entry(self.indirectFr)
         self.lowEntry.place(relx=0.397, rely=0.274, relheight=0.178, relwidth=0.427, bordermode='ignore')
         self.lowEntry.configure(takefocus="")
-        self.lowEntry.configure(cursor="ibeam")
+        self.lowEntry.configure(cursor="arrow")
         self.lowEntry.configure(textvariable=root_Finder_support.lower)
 
         self.upLabel = ttk.Label(self.indirectFr)
@@ -218,7 +218,7 @@ class RootFinder:
         self.upEntry = ttk.Entry(self.indirectFr)
         self.upEntry.place(relx=0.397, rely=0.556, relheight=0.178, relwidth=0.427, bordermode='ignore')
         self.upEntry.configure(takefocus="")
-        self.upEntry.configure(cursor="ibeam")
+        self.upEntry.configure(cursor="arrow")
         self.upEntry.configure(textvariable=root_Finder_support.upper)
 
         self.directFr = tk.LabelFrame(top)
@@ -241,7 +241,7 @@ class RootFinder:
         self.guessEntry1 = ttk.Entry(self.directFr)
         self.guessEntry1.place(relx=0.397, rely=0.274, relheight=0.178, relwidth=0.427, bordermode='ignore')
         self.guessEntry1.configure(takefocus="")
-        self.guessEntry1.configure(cursor="ibeam")
+        self.guessEntry1.configure(cursor="arrow")
         self.guessEntry1.configure(textvariable=root_Finder_support.guess1)
 
         self.methodsCB.bind("<<ComboboxSelected>>", lambda frame=self.directFr, label=self.enterLbl:
@@ -289,7 +289,7 @@ class RootFinder:
             self.guessEntry2 = ttk.Entry(self.directFr)
             self.guessEntry2.place(relx=0.397, rely=0.556, relheight=0.178, relwidth=0.427, bordermode='ignore')
             self.guessEntry2.configure(takefocus="")
-            self.guessEntry2.configure(cursor="ibeam")
+            self.guessEntry2.configure(cursor="arrow")
             self.guessEntry2.configure(textvariable=root_Finder_support.guess2)
 
             self.enterLbl.configure(text='Enter a function of x [f(x)] :')
