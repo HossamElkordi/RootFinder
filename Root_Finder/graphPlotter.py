@@ -33,6 +33,7 @@ class graphPlotter():
         if self.method == 0:
             '''indirect methods'''
             self.bounds = answer[1]
+            self.xes = answer[0]
             self.fx = np.arange(self.bounds[0][0] - 3, self.bounds[0][1] + 3, 0.2)
             self.fy = np.array([self.solver.evaluate(num) for num in self.fx])
             self.plot_indirect()
@@ -118,7 +119,6 @@ class graphPlotter():
             else:
                 self.current -= 1
             self.plot_direct()
-        # self.plt.plot(self.xs[self.current], self.ys[self.current])
         self.plt.axhline(y=0, color='k', label='X-Axis')
         self.plt.axvline(x=0, color='k', label='Y-Axis')
         self.plt.legend(loc="upper right")
@@ -127,7 +127,7 @@ class graphPlotter():
 
     def plot_indirect(self):
         self.plt.plot(self.fx, self.fy, color='r', label='f(x)')
-        # self.plt.plot()
+        self.plt.axvline(x=self.xes[self.current], color='c', label='Xi')
         self.plt.axvline(x=self.bounds[self.current][0], color='b', label='lower')
         self.plt.axvline(x=self.bounds[self.current][1], color='g', label='upper')
 
