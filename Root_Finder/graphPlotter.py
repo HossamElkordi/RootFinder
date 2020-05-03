@@ -127,6 +127,7 @@ class graphPlotter():
 
     def plot_indirect(self):
         self.plt.plot(self.fx, self.fy, color='r', label='f(x)')
+        # self.plt.plot()
         self.plt.axvline(x=self.bounds[self.current][0], color='b', label='lower')
         self.plt.axvline(x=self.bounds[self.current][1], color='g', label='upper')
 

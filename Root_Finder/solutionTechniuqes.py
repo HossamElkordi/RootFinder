@@ -10,19 +10,22 @@ class solution_techinques:
 
     def __init__(self, expression):
         self.expression = expression
+        self.x = Symbol('x')
+        self.deriv = parse_expr(self.expression)
+        self.deriv = self.deriv.diff(self.x)
+        self.deriv = lambdify(self.x, self.deriv)
 
     def f(self, x):
         return self.evaluate(x)
 
     def d(self, x):
-        return derivative(self.f, x)
+        return self.deriv(x)
 
     def evaluate(self, x):
         try:
             return eval(self.expression)
         except OverflowError:
             return float('inf')
-
 
     def bisection(self, upper, lower, accuracy, max_iter, round_digit):
         fu = self.evaluate(upper)
@@ -51,11 +54,11 @@ class solution_techinques:
             i += 1
             if i == 1:
                 continue
-            if i == max_iter:
-                break
             a = round(abs(old_x - x), round_digit)
             acc.append(a)
             if a < accuracy:
+                break
+            if i == max_iter:
                 break
             old_x = x
         return [xes, bounds, acc]
@@ -87,11 +90,11 @@ class solution_techinques:
             i += 1
             if i == 1:
                 continue
-            if i == max_iter:
-                break
             a = round(abs(old_x - x), round_digit)
             acc.append(a)
             if a < accuracy:
+                break
+            if i == max_iter:
                 break
             old_x = x
         return [xes, bounds, acc]
@@ -124,13 +127,9 @@ class solution_techinques:
         prev_guess = []
         xes = []
         acc = []
-        x = Symbol('x')
-        deriv = parse_expr(self.expression)
-        deriv = deriv.diff(x)
-        deriv = lambdify(x, deriv)
         while True:
             prev_guess.append(init)
-            x = round(init - (self.evaluate(init) / deriv(init)), round_digit)
+            x = round(init - (self.evaluate(init) / self.d(init)), round_digit)
             if x == inf:
                 return 'Overflow in math range'
             xes.append(x)
