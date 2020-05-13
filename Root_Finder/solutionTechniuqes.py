@@ -36,7 +36,7 @@ class solution_techinques:
         acc = []
         while True:
             bounds.append((lower, upper))
-            x = round((lower + upper) / 2.0, round_digit)
+            x = float((lower + upper) / 2.0).__round__(round_digit)
             xes.append(x)
             mul = fu * self.evaluate(x)
             if mul < 0:
@@ -72,7 +72,7 @@ class solution_techinques:
         acc = []
         while True:
             bounds.append((lower, upper))
-            x = round((lower * fu - upper * fl) / (fu - fl), round_digit)
+            x = float((lower * fu - upper * fl) / (fu - fl)).__round__(round_digit)
             xes.append(x)
             mul = fu * self.evaluate(x)
             if mul < 0:
@@ -104,7 +104,7 @@ class solution_techinques:
         while i < max_iter:
             prev_guesses.append(init)
             old = init
-            init = round(self.evaluate(init), round_digit)
+            init = float(self.evaluate(init)).__round__(round_digit)
             if init == inf:
                 return 'Overflow in math range'
             xes.append(init)
@@ -126,7 +126,7 @@ class solution_techinques:
         acc = []
         while True:
             prev_guess.append(init)
-            x = round(init - (self.evaluate(init) / self.d(float(init))), round_digit)
+            x = float(init - (self.evaluate(init) / self.d(float(init)))).__round__(round_digit)
             if x == inf:
                 return 'Overflow in math range'
             xes.append(x)
@@ -148,12 +148,12 @@ class solution_techinques:
         acc = []
         i = 0
         while True:
-            prev_guesses.append((pre_init, init))
+            prev_guesses.append((float(pre_init).__round__(round_digit), float(init).__round__(round_digit)))
             x = init - ((self.evaluate(init) * (pre_init - init)) / (
                     self.evaluate(pre_init) - self.evaluate(init)))
             if x == inf:
                 return 'Overflow in math range'
-            x = round(x, round_digit)
+            x = float(x).__round__(round_digit)
             xes.append(x)
             pre_init = init
             init = x

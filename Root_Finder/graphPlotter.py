@@ -34,8 +34,9 @@ class graphPlotter():
             '''indirect methods'''
             self.bounds = answer[1]
             self.xes = answer[0]
-            self.fx = np.arange(self.bounds[0][0] - 3, self.bounds[0][1] + 3, 0.2)
-            self.fy = np.array([self.solver.evaluate(num) for num in self.fx])
+            self.exclude_complex(self.bounds[0][0] - 3, self.bounds[0][1] + 3)
+            # self.fx = np.arange(self.bounds[0][0] - 3, self.bounds[0][1] + 3, 0.2)
+            # self.fy = np.array([self.solver.evaluate(num) for num in self.fx])
             self.plot_indirect()
         else:
             '''direct method'''
@@ -135,12 +136,9 @@ class graphPlotter():
         if self.method == 3:
             max_guess = max(self.guesses[self.current][0], self.guesses[self.current][1])
             min_guess = min(self.guesses[self.current][0], self.guesses[self.current][1])
-            self.fx = np.arange(min_guess - 3, max_guess + 3, 0.2)
-            self.fy = np.array([self.solver.evaluate(num) for num in self.fx])
+            self.exclude_complex(min_guess - 3, max_guess + 3)
         else:
-            self.fx = np.arange(self.guesses[self.current] - 3, self.guesses[self.current] + 3, 0.2)
-            self.fy = np.array([self.solver.evaluate(num) for num in self.fx])
-
+            self.exclude_complex(self.guesses[self.current] - 3, self.guesses[self.current] + 3)
         if self.method == 1:
             self.unit_x = np.array([self.fx[0], self.fx[len(self.fx) - 1]])
             self.unit_y = np.array([self.fx[0], self.fx[len(self.fx) - 1]])
@@ -168,6 +166,24 @@ class graphPlotter():
         else:
             self.plt.axvline(x=self.guesses[self.current], color='b', label='Xi-1')
         self.plt.axvline(x=self.xes[self.current], color='g', label='Xi')
+
+    def exclude_complex(self, from_x, to_x):
+        fx = np.arange(from_x, to_x, 0.2)
+        real_x = []
+        real_y = []
+        for num in fx:
+            y = self.solver.evaluate(num)
+            if isinstance(y, np.float):
+                real_x.append(num)
+                real_y.append(y)
+            elif not y.is_real:
+                continue
+            else:
+                real_x.append(num)
+                real_y.append(y)
+        self.fx = np.array(real_x)
+        self.fy = np.array(real_y)
+
 
 
 class ToolTip(tk.Toplevel):
