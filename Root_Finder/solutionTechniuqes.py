@@ -129,7 +129,7 @@ class solution_techinques:
         acc = []
         while True:
             prev_guess.append(init)
-            x = round(init - (self.evaluate(init) / self.d(init)), round_digit)
+            x = round(init - (self.evaluate(init) / self.d(float(init))), round_digit)
             if x == inf:
                 return 'Overflow in math range'
             xes.append(x)
