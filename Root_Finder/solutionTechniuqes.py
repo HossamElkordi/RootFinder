@@ -1,9 +1,6 @@
 from math import *
 from sympy import *
 from sympy.parsing.sympy_parser import parse_expr
-from typing import List, Any
-
-from scipy.misc import derivative
 
 
 class solution_techinques:

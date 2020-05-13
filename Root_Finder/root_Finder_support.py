@@ -5,7 +5,6 @@
 #  in conjunction with Tcl version 8.6
 #    Apr 15, 2020 05:32:31 PM +0200  platform: Windows NT
 
-import sys
 from decimal import Decimal
 from numpy import double
 import time
@@ -13,7 +12,6 @@ import solutionTechniuqes as st
 import graphPlotter as gp
 import traceback
 from reportlab.pdfgen import canvas
-import PyPDF2
 
 try:
     import Tkinter as tk

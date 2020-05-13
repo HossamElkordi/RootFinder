@@ -7,7 +7,6 @@
 
 import sys
 
-# from graphPlotter import graphPlotter
 
 try:
     import Tkinter as tk
